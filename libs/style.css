@@ -1,0 +1,53 @@
+div{
+    margin:auto;
+    text-align: center;
+}
+
+#main_table{
+    width:95%;
+    background-color: antiquewhite;
+}
+
+#display_stage{
+    max-width: 100%;
+    height: calc(95vh - 30px);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-image: 00000000.png;
+}
+
+#feedback_window { 
+    display: none; 
+    position: fixed; 
+    top: 25%; 
+    left: 25%; 
+    width: 50%; 
+    height: 50%; 
+    padding: 20px; 
+    border: 10px solid #989898; 
+    background-color: white; 
+    z-index:1002; 
+    overflow: auto; 
+}
+
+.txtbox {
+    color:#333;
+    line-height:normal;font-style:normal;font-variant:normal;font-size-adjust:none;font-stretch:normal;font-weight:normal;
+    margin-top:0px;margin-bottom:0px;margin-left:0px;
+    padding-top:4px;padding-right:4px;padding-bottom:4px;padding-left:4px;
+    font-size:15px;
+    outline-width:medium;outline-style:none;outline-color:invert;
+    border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-left-radius:3px;border-bottom-right-radius:3px;
+    text-shadow:0px 1px 2px #fff;
+    background-attachment:scroll;background-repeat:repeat-x;background-position-x:left;background-position-y:top;background-size:auto;
+    background-origin:padding-box;background-clip:border-box;background-color:rgb(255,255,255);
+    margin-right:8px;
+    border-top-color:#ccc;border-right-color:#ccc;border-bottom-color:#ccc;border-left-color:#ccc;border-top-width:1px;border-right-width:1px;
+    border-bottom-width:1px;border-left-width:1px;border-top-style:solid;border-right-style:solid;border-bottom-style:solid;border-left-style:solid;
+}
+
+#shared_url {
+    position: absolute;
+    top: -100px;
+}
