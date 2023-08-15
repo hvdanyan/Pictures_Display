@@ -82,7 +82,7 @@ try{
 //!生成图片列表
 
 #图片遍历表
-$FullFile = ['./cache/PictureFiles_13','./cache/PictureFiles_15','./cache/PictureFiles_17','./cache/PictureFiles_18'];
+$FullFile = ['./cache/PictureFiles_13.json','./cache/PictureFiles_15.json','./cache/PictureFiles_17.json','./cache/PictureFiles_18.json'];
 
 if(!$Classify || $selected_age_level == "18"){
     #若分级系统关闭，或者年龄分级为18+，则使用完整的图片遍历表
@@ -103,6 +103,25 @@ else{
     $cache_list = array_slice($FullFile,0,1);#必须是一个列表
 }
 
+fullpiclist = array();
+foreach ($cache_list as $value) {
+    #如果没有开启遍历表的缓存，那么强制单独获取
+    if($PictureListCache){
+        if(file_exists($value) && time()-filemtime($value)<30){
+            $fullpiclist = array_merge($fullpiclist,json_decode(file_get_contents($value),true));
+            continue;
+        }
+    }
+
+    #遍历获取文件
+    if()
+    $data = scandir()
+
+    if($PictureListCache){
+        #将数据存进json文件中
+    }
+}
+return fullpiclist;
 //!抽取图片或者打开指定图片
 
 

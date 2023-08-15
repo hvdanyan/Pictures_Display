@@ -1,5 +1,6 @@
 <?php
 
+#将所有的错误都以异常的形式抛出
 function Error_trans_excpt($type,$message,$file,$line){
     throw new \Exception($message);
 }
@@ -34,5 +35,7 @@ function aTD($num,$n){
     return $new_num;
 }
 
-function Image_list($PictureListCache)
+function Image_list($Classify,$PictureListCache,$cache_list){
+
+}
 ?>
