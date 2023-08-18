@@ -35,7 +35,4 @@ function aTD($num,$n){
     return $new_num;
 }
 
-function Image_list($Classify,$PictureListCache,$cache_list){
-
-}
 ?>

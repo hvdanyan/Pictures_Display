@@ -2,13 +2,21 @@
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width,user-scalable=yes" name="viewport">
-        <meta http-equiv="refresh" content="0;url=index.php">
+        <!--<meta http-equiv="refresh" content="0;url=index.php">-->
         <title>PictrueDisplayer</title>
         <link rel="icon" href="./logo.png">
         <script src="libs/index_scripts.js"></script>
         <link rel="stylesheet" type="text/css" href="libs/style.css">
-        <script src="libs/jquery-3.6.0.min.js">
-            
+        <script src="libs/jquery-3.6.0.min.js"></script>
+        <script>
+
+            $(document).ready(function(){
+                $("#link").val(get_link());//提取link参数
+                request_files();
+                $("#link").val("");
+                history.pushState(0,0,window.location.href.split('?')[0]);//自动隐藏参数
+
+            })
         </script>
     </head>
 
@@ -16,40 +24,42 @@
         <div id="main_table">
             <div id="first_row">
                 <button id="origin_button"  onclick="showorigin()">查看原图</button>
-                <button id="enlargepic_button" href="" target=_blank  onclick="showorigin()">点击打开大图</button>
+                <a id="enlargepic_href" href="" target="_blank" ><button id="enlargepic_button" onclick="showorigin()">点击打开大图</button></a>
                 <a id="currentagelevel_text">当前年龄模式：</a>
                 <a id="agelevel_text">13+</a>
+                <a id="currentpiclevel_text">当前图片等级：</a>
+                <a id="piclevel_text">Unknown</a>
+                <a id="currenttotalnum_text">当前拉取的图片总数：</a>
+                <a id="totalnum_text">Unknown</a>
                 <a>单击图片打开下一张。</a>
                 <a id="pixivID_text">p站ID：</a>
-                <a id="pixivurl_text" href="">00000000</a>
-                <button id="sharelink_button" title="点击以复制分享链接">一键分享图片</button>
+                <a id="pixivurl_text" href="" target="_blank">Unknown</a>
+                <button id="sharelink_button" title="点击以复制分享链接" onclick="copyurl()">一键分享图片</button>
             </div>
-            <div id="display_stage">
-
-            </div>
+            <div id="display_stage" onclick="request_files()"></div>
             <div id="second_row">
                 <p id="find_similar_pic">找到了相同ID的图片</p>
+                <p id="similar_pic"></p>
                 <p id="is_gif">该图片是动图，若要查看请点击点击“查看原图”。</p>
             </div>
             <div id="third_row">
-                <form action="." method="post">打开指定图片：
-                    <input type='hidden' name='s' value='%s'/>
-                    <input type='hidden' name='t' value='%s'/>
-                    <input type="text" id="Target_url" class="txtbox" name="link" onkeyup="this.size=(this.value.length>25?this.value.length:25);" size="25" value="">
-                    <input type="submit" value="确认">
+                <form onsubmit="return false">
+                    <a>打开指定图片：</a>
+                    <input type="text" id="target_pic" class="txtbox" name="link" onkeyup="this.size=(this.value.length>25?this.value.length:25);" size="25" value="">
+                    <input type="submit" value="确认" onclick="search_file()">
                 </form>
             </div>
             <div id="fourth_row">
-                <form action="." method="post">更改年龄等级：
+                <form onsubmit="return false">
+                    <a>更改年龄等级：</a>
                     <label>
-                    <input type='hidden' name='t' value='%s'/>
-                    <input type="radio" name="s" value="13" id="RadioGroup1_0">13+
-                    <input type="radio" name="s" value="15" id="RadioGroup1_1">15+
-                    <input type="radio" name="s" value="17" id="RadioGroup1_2">17+
-                    <input type="radio" name="s" value="18" id="RadioGroup1_3">18+
-                    <input type="radio" name="s" value="AO" id="RadioGroup1_4">Adult Only
+                        <input type="radio" name="agelevel" value="13" >13+
+                        <input type="radio" name="agelevel" value="15" >15+
+                        <input type="radio" name="agelevel" value="17" >17+
+                        <input type="radio" name="agelevel" value="18" >18+
+                        <input type="radio" name="agelevel" value="AO" >Adult Only
                     </label>
-                    <input type="submit" value="确认">
+                    <input type="submit" value="确认" onclick="set_agelevel()">
                     </form>
             </div>
             <div id="fifth_row">
@@ -68,6 +78,14 @@
                 <input type="button" value="提交" onclick="activating_feedback">
             </form>
         </div>
+
+        <form id="request_form" style="display:none;">
+            <input type='hidden' id='agelevel'/>
+            <input type='hidden' id='token'/>
+            <input type='hidden' id='link'/>
+
+        </form>
+        <textarea id="shared_url"></textarea>
         
     </body>
 </html>

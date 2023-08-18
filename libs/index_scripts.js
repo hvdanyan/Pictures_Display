@@ -1,17 +1,93 @@
-window.alert = function(name){//删除提示框显示域名
-    var iframe = document.createElement("IFRAME");
-    iframe.style.display="none";
-    iframe.setAttribute("src", 'data:text/plain,');
-    document.documentElement.appendChild(iframe);
-    window.frames[0].window.alert(name);
-    iframe.parentNode.removeChild(iframe);
-};
+//获取get方式中link的内容
+function get_link(){
+
+    //jquery中有一个函数可以实现相同的功能$.urlParam(name)
+    var get = window.location.href.match(/link.+/);
+    
+    if(!get){
+        return false;
+    }
+    else{
+        get = get[0];
+    }
+
+    get = get.slice(5);
+    //排除后面如果还有其他的get内容
+    var nextPar = get.indexOf("&");
+    if (nextPar != -1) {
+        get = get.slice(0, nextPar);
+    }
+    return get;
+}
+
+function request_files(){
+    $.post("./Get_Files.php",
+    {
+        agelevel:$("#agelevel").val(),
+        token:$("#token").val(),
+        link:$("#link").val()
+    },
+    function(data,status){
+        if(data.code == 700){
+            $("#display_stage").css("background-image",`url(${data.picture})`);
+            $("#enlargepic_href").attr("href",window.location.origin+window.location.pathname+data.picture);
+            $("#shared_url").text(window.location.origin+window.location.pathname+"?link="+data.picture_name);
+            $("#totalnum_text").text(data.total);
+            if(data.is_classified == "True"){
+                $("#piclevel_text").text(data.piclevel);
+            }
+            else{
+                $("#currentagelevel_text").hide();
+                $("#agelevel_text").hide();
+                $("#currentpiclevel_text").hide();
+                $("#piclevel_text").hide();
+            }
+            if(data.is_pixiv == "True"){
+                $("#pixivurl_text").text(data.picture_root); 
+                $("#pixivurl_text").attr("href",data.origin_link); 
+            }
+            else{
+                $("#pixivID_text").hide();
+                $("#pixivurl_text").hide();
+            }
+            
+        }
+
+    }
+    )
+}
 
 function copyurl(){//复制分享链接
-    var input=document.getElementById("shared_url");
-    input.select(); 
-    document.execCommand("Copy"); 
+    if (navigator.clipboard && window.isSecureContext) {//安全域下
+        var shared_url=document.getElementById("shared_url");
+        navigator.clipboard.writeText(shared_url);
+    }
+    else{//非安全域下上面的方法被禁用
+        var input=document.getElementById("shared_url");
+        input.select(); 
+        document.execCommand("Copy"); 
+    }
     alert("链接复制成功！");
+    
+}
+
+function showorigin(){
+    //$('.theframe').css('background-image', 'url(%s)');
+    $("#origin_button").hide();
+}
+
+function search_file(){
+    $("#link").val($("#target_pic").val());//先将link修改为和target_pic一致
+    request_files();
+    $("#link").val("");//清空link
+    scrollTo(0,0);//回到顶部
+}
+
+function set_agelevel(){
+    $("#agelevel").val($('input[name="agelevel"]:checked').val());
+    request_files();
+    $("#agelevel_text").text($('input[name="agelevel"]:checked').val()+"+");
+    scrollTo(0,0);//回到顶部
 }
 
 function post(url,s,t,link) {//使用js代码实现隐藏form表单的实现
@@ -99,11 +175,6 @@ function gettingtoken(){
     xmlhttp.send($("#get_token_form").serialize());
 }
 
-function showorigin(){
-    $('.theframe').css('background-image', 'url(%s)');
-    document.getElementById('originalpic').style.display='none';
-}
-
 function invokeSettime(obj){
 gettingtoken()
 var countdown=30;//30秒后重新发送
@@ -122,5 +193,5 @@ function settime() {
     setTimeout(function() {
                 settime() }
             ,1000)
-}
+        }
 }
