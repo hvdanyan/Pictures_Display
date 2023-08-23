@@ -61,8 +61,48 @@ else{
 $token_salt = intval(isset($config['tokensys']['tokensalt'])?$config['tokensys']['tokensalt']:"0");#获取一个初始化时生成的随机数，用于生成令牌。
 
 $token_enable = isset($config['tokensys']['tokenenable'])?$config['tokensys']['tokenenable']:"";
-if ($token_enable !== "High"||$token_enable !== "Normal"){
+
+if ($token_enable != "High" && $token_enable != "Normal"){
     $token_enable = "None";#当等级不是High或者Normal时，自动调整为None
+}
+
+//!令牌验证系统
+if($token_enable != "None"){
+    $permission = false;
+    
+    if(($token_enable=="High" && $link=="")||$selected_age_level == "17" || $selected_age_level == "18" || $selected_age_level == "AO"){#在这三个等级下或者是强制令牌审查时需要验证。
+        try{
+            strval(intval(strrev(strval(aTD(strrev(dTA(aTD(strtolower($token),24),16)),16))))^$token_salt);
+        }catch(Exception $e){
+            echo $e;
+            echo '{"code":714}';//输出714，令牌解析异常
+            exit(0);
+        }
+
+        $reg_time = strval(intval(strrev(strval(aTD(strrev(dTA(aTD(strtolower($token),24),16)),16))))^$token_salt);
+        $timeStamp = strtotime("20".substr($reg_time,0,2)."-".substr($reg_time,2,2)."-".substr($reg_time,4,2)." ".substr($reg_time,6,2).":00:00");
+        
+        if(time()-$timeStamp > 90000 || $timeStamp > time()){}
+        else{
+            $permission = true;
+        }
+    }
+    else{
+        $permission = true;
+    }
+}
+else{
+    $permission = true;
+}
+
+if($permission == false){
+    if($token == ""){
+        echo '{"code":713}';//输出713，令牌为空
+    }
+    else{
+        echo '{"code":714}';//输出714，令牌错误或异常
+    }
+    exit(0);
 }
 
 
@@ -179,12 +219,27 @@ if($FromPixiv){
     preg_match('/\d{4,}/',$json["picture_name"],$json["picture_root"]);
     $json["picture_root"]=$json["picture_root"][0];
     $json["origin_link"] = "https://www.pixiv.net/artworks/".$json["picture_root"];
+    $json["find_same"] = "False";
+
+    if(preg_match('/gif/',$json["picture_name"])){
+        $json["is_gif"] = "True";
+    }
+    else{
+        $json["is_gif"] = "False";
+    }
 
 }
 else{
     $json['is_pixiv'] = "False";
 }
 
+if($Compression && file_exists("compressed/".$json["picture"])){
+    $json["compress"] = "True";
+    $json["compressed_picture"] = "compressed".$json["picture"];
+}
+else{
+    $json["compress"] = "False";
+}
 
 
 echo json_encode($json);

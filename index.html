@@ -36,11 +36,30 @@
                 <a id="pixivurl_text" href="" target="_blank">Unknown</a>
                 <button id="sharelink_button" title="点击以复制分享链接" onclick="copyurl()">一键分享图片</button>
             </div>
+            <div id="token_verify" style="display:none;">
+                <br>
+                <h1>很抱歉，启用该等级需要输入令牌</h1>
+                <form onsubmit="return false">在此输入令牌口令：
+                    <input type="text" class="txtbox" name="token" value="">
+                    <input type="submit" value="确认" onclick="set_token()">
+                </form>
+                <h2>什么是令牌？</h2>
+                <h3>令牌是一枚有效期为24h的口令，必须输入正确的口令才可以访问高等级的内容。</h3>
+                <h4>在有效期内，令牌是可以无限次使用的，因此令牌不需要重复申请。</h4>
+                <h5>网站不会记住你的登录状态，因此在再次访问时，你需要重新填入之前的令牌。</h5>
+                <form id="get_token_form">
+                    <h3>请输入邮箱来申请一枚令牌：</h3>
+                    <p>邮箱：<input type="text" name="mail" value=""> 
+                    <button id="btn" type="button" onclick="getting_token();invokeSettime()">获取验证码</button>
+                    </form></p>
+                    <h5>此网站不会记录包括邮箱在内的任何数据。</h5><br>
+                    <h5>令牌生成算法基于SDPv2（基本动态密码v2）。</h5>
+            </div>
             <div id="display_stage" onclick="request_files()"></div>
             <div id="second_row">
                 <p id="find_similar_pic">找到了相同ID的图片</p>
                 <p id="similar_pic"></p>
-                <p id="is_gif">该图片是动图，若要查看请点击点击“查看原图”。</p>
+                <p id="is_gif">该图片是动图，若图片不动请点击点击“查看原图”。</p>
             </div>
             <div id="third_row">
                 <form onsubmit="return false">

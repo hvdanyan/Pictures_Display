@@ -7,9 +7,9 @@ function Error_trans_excpt($type,$message,$file,$line){
 
 #十进制转任意进制（小于24进制），num是原数字，n是目标进制
 function dTA($num,$n){
+    $baseStr = [10=>'a',11=>'b',12=>'c',13=>'d',14=>'e',15=>'f',16=>'g',17=>'f',18=>'i',19=>'j',20=>'k',21=>'l',22=>'m',23=>'n'];
+    $new_num_str = "";
     while($num != 0){
-        $baseStr = [10=>'a',11=>'b',12=>'c',13=>'d',14=>'e',15=>'f',16=>'g',17=>'f',18=>'i',19=>'j',20=>'k',21=>'l',22=>'m',23=>'n'];
-        $new_num_str = "";
         $remainder = $num % $n;
         if($remainder > 9){
             $remainder_string = $baseStr[$remainder];
@@ -20,6 +20,7 @@ function dTA($num,$n){
         $new_num_str = $remainder_string.$new_num_str;
         $num = intval($num/$n);
     }
+    
     return $new_num_str;
 }
 

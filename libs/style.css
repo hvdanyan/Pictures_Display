@@ -14,6 +14,7 @@ div{
     background-repeat: no-repeat;
     background-size: contain;
     background-position-x: center;
+    margin:10px;
     background-image: 00000000.png;
 }
 

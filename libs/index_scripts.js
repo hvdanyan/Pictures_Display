@@ -28,7 +28,19 @@ function request_files(){
         link:$("#link").val()
     },
     function(data,status){
+        if(data.code >= 713){
+            $("#token_verify").show();
+            $("#display_stage").hide();
+            if(data.code == 714){
+                alert("输入的令牌错误，请重新输入。");
+
+            }
+        }
+
         if(data.code == 700){
+            $("#token_verify").hide();
+            $("#display_stage").show();
+
             $("#display_stage").css("background-image",`url(${data.picture})`);
             $("#enlargepic_href").attr("href",window.location.origin+window.location.pathname+data.picture);
             $("#shared_url").text(window.location.origin+window.location.pathname+"?link="+data.picture_name);
@@ -45,6 +57,28 @@ function request_files(){
             if(data.is_pixiv == "True"){
                 $("#pixivurl_text").text(data.picture_root); 
                 $("#pixivurl_text").attr("href",data.origin_link); 
+
+                if(data.find_same == "True"){
+                    $("#find_similar_pic").show();
+                    $("#similar_pic").show();
+                }
+                else{
+                    $("#find_similar_pic").hide();
+                    $("#similar_pic").hide();
+                }
+                if(data.is_gif == "True"){
+                    $("#is_gif").show();
+                }
+                else{
+                    $("#is_gif").hide();
+                }
+                if(data.compress == "True"){
+                    $("#origin_button").show();
+                }
+                else{
+                    $("#origin_button").hide();
+                }
+
             }
             else{
                 $("#pixivID_text").hide();
@@ -88,6 +122,45 @@ function set_agelevel(){
     request_files();
     $("#agelevel_text").text($('input[name="agelevel"]:checked').val()+"+");
     scrollTo(0,0);//回到顶部
+}
+
+function set_token(){
+    $("#token").val($('input[name="token"]').val());
+    request_files();
+    scrollTo(0,0);//回到顶部
+}
+
+function getting_token(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            alert(xmlhttp.responseText);
+        }
+    }
+
+    xmlhttp.open("post","./advanced/Get_Token.php",true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=utf-8");
+    xmlhttp.send($("#get_token_form").serialize());
+}
+
+function invokeSettime(obj){
+var countdown=30;//30秒后重新发送
+settime(obj);
+function settime() {
+    if (countdown == 0) {
+        $("#btn").attr("disabled",false);
+        $("#btn").text("获取验证码");
+        countdown = 60;
+        return;
+    } else {
+        $("#btn").attr("disabled",true);
+        $("#btn").text("(" + countdown + ") s 重新发送");
+        countdown--;
+    }
+    setTimeout(function() {
+                settime() }
+            ,1000)
+        }
 }
 
 function post(url,s,t,link) {//使用js代码实现隐藏form表单的实现
@@ -161,37 +234,3 @@ function activatingfeedback(){
     xmlhttp.send($("#apply_link_form").serialize());
 }
 
-function gettingtoken(){
-    var xmlhttp;
-    xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function(){
-        var code;
-        if (xmlhttp.readyState==4 && xmlhttp.status==200){
-            code= xmlhttp.responseText;
-        }
-    }
-    xmlhttp.open("post",".",true);
-    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=utf-8");
-    xmlhttp.send($("#get_token_form").serialize());
-}
-
-function invokeSettime(obj){
-gettingtoken()
-var countdown=30;//30秒后重新发送
-settime(obj);
-function settime() {
-    if (countdown == 0) {
-        $("#btn").attr("disabled",false);
-        $("#btn").text("获取验证码");
-        countdown = 60;
-        return;
-    } else {
-        $("#btn").attr("disabled",true);
-        $("#btn").text("(" + countdown + ") s 重新发送");
-        countdown--;
-    }
-    setTimeout(function() {
-                settime() }
-            ,1000)
-        }
-}
