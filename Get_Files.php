@@ -20,7 +20,7 @@ $selected_age_level = isset($_REQUEST['agelevel'])?$_REQUEST['agelevel']:"";
 $token = isset($_REQUEST['token'])?$_REQUEST['token']:NULL;
 
 //!读取配置文件
-$config = parse_ini_file('config.ini',true);
+$config = parse_ini_file('configs.ini',true);
 
 $url = isset($config['webinfo']['url'])?$config['webinfo']['url']:'PicturesDisplayer';#获取网站的url
 $title = isset($config['webinfo']['title'])?$config['webinfo']['title']:'PicturesDisplayer';#获取网站的标题

@@ -9,14 +9,29 @@
         <link rel="stylesheet" type="text/css" href="libs/style.css">
         <script src="libs/jquery-3.6.0.min.js"></script>
         <script>
-
             $(document).ready(function(){
                 $("#link").val(get_link());//提取link参数
                 request_files();
                 $("#link").val("");
                 history.pushState(0,0,window.location.href.split('?')[0]);//自动隐藏参数
 
-            })
+                // Read siteName from configs.ini
+                $.ajax({
+                    url: "configs.ini",
+                    dataType: "text",
+                    success: function(data) {
+                        var siteName = parseIni(data, "webinfo", "siteName");
+                        if (siteName) {
+                            $("title").text(siteName);
+                        } else {
+                            window.location.href = "init.html";
+                        }
+                    },
+                    error: function() {
+                        window.location.href = "init.html";
+                    }
+                });
+            });
         </script>
     </head>
 

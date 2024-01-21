@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>网站初始化</title>
+    <script src="libs/init_scripts.js"></script> <!-- Add this line to include the script -->
+</head>
+<body>
+    <h1>网站初始化</h1>
+    <form action="/advanced/init.php" method="POST">
+        <label for="siteName">站点名称:</label>
+        <input type="text" id="siteName" name="siteName" value="图片展廊" required><br><br>
+        
+        <label for="siteUrl">站点URL:</label>
+        <input type="url" id="siteUrl" name="siteUrl" required><br><br>
+        
+        <label for="classify">是否分级:</label>
+        <input type="checkbox" id="classify" name="classify"><br><br>
+        
+        <label for="frompixiv">是否来自pixiv:</label>
+        <input type="checkbox" id="frompixiv" name="frompixiv"><br><br>
+        
+        <label for="compression">是否压缩:</label>
+        <input type="checkbox" id="compression" name="compression" checked><br><br>
+        
+        <label for="picturelistcache">是否缓存:</label>
+        <input type="checkbox" id="picturelistcache" name="picturelistcache" checked><br><br>
+        
+        <label for="tokenEnable">令牌启用级别:</label>
+        <select id="tokenEnable" name="tokenEnable">
+            <option value="high">高等级</option>
+            <option value="normal">普通</option>
+            <option value="none" selected>无</option>
+        </select><br><br>
+        
+        <label for="tokenSalt">令牌盐:</label>
+        <input type="text" id="tokenSalt" name="tokenSalt"><br><br>
+        
+        <input type="submit" value="提交">
+    </form>
+    <script>
+        // Automatically fill the URL input field using the getUrlFromAddressBar() function
+        document.getElementById("siteUrl").value = getUrlFromAddressBar();
+        document.getElementById("tokenSalt").value = generateSalt();
+    </script>
+</body>
+</html>
